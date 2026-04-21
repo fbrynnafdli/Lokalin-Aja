@@ -10,19 +10,18 @@ import Link from "next/link";
 
 const prisma = new PrismaClient();
 
-// === FUNGSI AMBIL DATA DARI DATABASE ===
+// FUNGSI AMBIL DATA DARI DATABASE 
 async function getPlaces() {
   const places = await prisma.place.findMany({
-    where: { status: "APPROVED" }, // Hanya ambil yang sudah diapprove
-    orderBy: { createdAt: 'desc' }, // Urutkan dari yang terbaru
-    take: 4, // Ambil 4 aja buat section "Lagi Rame"
-    include: { reviews: true } // Siapa tau butuh rating nanti
+    where: { status: "APPROVED" }, 
+    orderBy: { createdAt: 'desc' }, 
+    take: 4, 
+    include: { reviews: true } 
   });
   return places;
 }
 
 export default async function Home() {
-  // Panggil data sebelum render HTML
   const places = await getPlaces();
 
   return (
@@ -30,13 +29,10 @@ export default async function Home() {
       <Navbar />
       <Hero />
       
-      {/* =========================================
-          SECTION 1: LAGI RAME (DATA DINAMIS)
-          Padding: pt-16 (atas lega), pb-4
-      ========================================= */}
+      {/* SECTION 1: LAGI RAME*/}
       <section className="w-full bg-white pt-16 pb-4 px-16 md:px-[80px]">
         
-        {/* Header Judul Section */}
+        {/* Header Section */}
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-[18px] font-bold text-gray-900">
             Lagi Rame Di Area Kamu
@@ -55,20 +51,18 @@ export default async function Home() {
                 Belum ada tempat yang terdaftar. Yuk jadi mitra pertama!
              </div>
           ) : (
-            // LOGIKA: Looping data dari Database
+            // DATA TEMPAT (STATIC)
             places.map((place) => (
               <Link href={`/place/${place.id}`} key={place.id} className="block group">
                 <UmkmCard 
-                  // Ambil foto pertama, atau pakai placeholder kalau kosong
                   image={place.images[0] || "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1000&auto=format&fit=crop"} 
                   title={place.name}
-                  rating="4.8" // Nanti kita hitung rata-rata review beneran
-                  location={place.address} // Alamat asli dari DB
-                  distance="0.5 km" // Nanti pake fitur lokasi (Maps)
+                  rating="4.8" 
+                  location={place.address}
+                  distance="0.5 km" 
                   hours="Buka Hari Ini"
-                  badge={place.category} // Kategori dari DB (Ngops/Makan/dll)
-                  tags={[place.category, "Hits"]} // Tag dummy + kategori
-                  // Props optional (kalau di komponen kamu ada)
+                  badge={place.category} 
+                  tags={[place.category, "Hits"]}
                   badgeColor={place.category === 'Ngops' ? 'bg-[#00BFA5]' : 'bg-[#FF6B6B]'} 
                 />
               </Link>
@@ -78,10 +72,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* =========================================
-          SECTION 2: PROMO (MASIH STATIC DULU)
-          Nanti bisa dibikin dinamis kalau sudah ada fitur Promo di Dashboard Mitra
-      ========================================= */}
+      {/* SECTION 2: PROMO (STATIC)*/}
       <section className="w-full bg-white pt-4 pb-4 px-16 md:px-[80px]">
         
         <div className="flex items-center justify-between mb-2">
@@ -99,7 +90,7 @@ export default async function Home() {
             image="/images/sorespace.jpg" 
             title="Sore Space" rating="4.5" location="Sumedang" distance="2.3 km" hours="Tutup 02.00"
             badge="Cozy"
-            promo="Beli 1 Dapat 1" // <--- Ini yang bikin beda
+            promo="Beli 1 Dapat 1"
             tags={["Nongkrong", "Ngops"]}
           />
           {/* Card Promo 2 */}
@@ -129,9 +120,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* =========================================
-          SECTION 3: UMKM LOKAL (STATIC)
-      ========================================= */}
+      {/* SECTION 3: UMKM LOKAL (STATIC) */}
       <section className="w-full bg-white pt-4 pb-4 px-16 md:px-[80px]">
         
         <div className="flex items-center justify-between mb-2">
@@ -151,7 +140,6 @@ export default async function Home() {
             badge="Asli Lokal"
             description="Sambelnya bikin inget masakan Ibu di rumah."
           />
-          {/* Sisanya static dulu biar layout gak rusak */}
           <UmkmCard 
             image="/images/warungbuimas.jpg" 
             title="Warung Bu Imas" rating="4.9" location="Gg. Unsap" distance="1.0 km" hours="Mulai dari 10rb"
@@ -173,9 +161,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* =========================================
-          SECTION 4: REVIEW (STATIC)
-      ========================================= */}
+      {/* SECTION 4: REVIEW (STATIC) */}
       <section className="w-full bg-white pt-4 pb-4 px-6 md:px-[80px]">
         
         <div className="flex items-center justify-between mb-2">
@@ -215,9 +201,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* =========================================
-          SECTION 5: KATEGORI (STATIC)
-      ========================================= */}
+      {/* SECTION 5: KATEGORI (STATIC) */}
       <section className="w-full bg-white pt-4 pb-24 px-6 md:px-[80px]">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-[18px] font-bold text-gray-900">

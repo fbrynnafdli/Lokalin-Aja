@@ -34,8 +34,6 @@ const UmkmCard: React.FC<UmkmCardProps> = ({
   return (
     <div className="w-full relative rounded-xl bg-white flex flex-col items-start py-2.5 px-[5px] box-border gap-[5px] text-left text-base font-sans shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group h-full border border-gray-50">
       
-      {/* === BAGIAN GAMBAR === */}
-      {/* Wrapper ini relative, jadi badge patokannya ke kotak ini */}
       <div className="self-stretch h-[184px] relative w-full">
         <Image 
           src={image}
@@ -45,15 +43,12 @@ const UmkmCard: React.FC<UmkmCardProps> = ({
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
 
-        {/* BADGE POJOK KANAN ATAS */}
-        {/* FIX: top-0 right-0 biar nempel di pojok gambar pas */}
         {badge && (
           <div className={`absolute top-0 right-0 w-[77px] h-[23px] rounded-tr-[14px] rounded-bl-[20px] ${badgeColor} flex items-center justify-center z-[2] text-xs text-white shadow-sm`}>
              <div className="relative leading-[150%] font-light">{badge}</div>
           </div>
         )}
 
-        {/* BADGE PROMO (Kiri Bawah) */}
         {promo && (
           <div className="absolute bottom-0 left-0 bg-[#00BFA5] h-[23px] text-white text-[10px] font-bold px-3 flex items-center justify-center shadow-sm z-[2] rounded-tr-[20px] rounded-bl-[14px] whitespace-nowrap">
             {promo}
@@ -61,10 +56,8 @@ const UmkmCard: React.FC<UmkmCardProps> = ({
         )}
       </div>
 
-      {/* === BAGIAN TEXT/CONTENT === */}
       <div className="flex flex-col items-start z-[1] w-full px-1">
         
-        {/* Judul & Rating */}
         <div className="self-stretch flex items-center justify-between gap-[15px]">
           <b className="relative leading-[150%] text-gray-900 line-clamp-1">{title}</b>
           <div className="flex items-center justify-center gap-1 text-sm text-black">
@@ -73,7 +66,6 @@ const UmkmCard: React.FC<UmkmCardProps> = ({
           </div>
         </div>
 
-        {/* Lokasi, Jam & Tags */}
         <div className="self-stretch flex flex-col items-start text-xs text-black mt-1">
           <div className="relative leading-[150%] text-gray-600">
             <span className="font-medium text-gray-900">{location} </span>

@@ -59,7 +59,7 @@ const Navbar = () => {
                    {/* === DROPDOWN MENU === */}
                    <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 p-2 flex flex-col gap-1 transform origin-top-right">
                       
-                      {/* 1. LINK KE DASHBOARD (Hanya muncul kalau login) */}
+                      {/* 1. LINK KE DASHBOARD */}
                       <Link 
                         href="/dashboard" 
                         className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#00BFA5] rounded-lg flex items-center gap-3 font-medium transition-colors"
@@ -67,7 +67,6 @@ const Navbar = () => {
                         <SquaresFour size={20} /> Dashboard Mitra
                       </Link>
                       
-                      {/* Garis Pemisah */}
                       <div className="h-[1px] bg-gray-100 my-1"></div>
 
                       {/* 2. TOMBOL KELUAR */}

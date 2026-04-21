@@ -56,15 +56,15 @@ export default async function PlaceDetailPage({ params }: PageProps) {
       {/* 1. Galeri Foto */}
       <PlaceImageGallery images={place.images} />
 
-      {/* 2. Judul, Alamat & Info (UPDATE DI SINI) */}
-      <PlaceHeader />
+      {/* 2. Judul, Alamat & Info */}
+      <placeHeader />
          name={place.name} 
          rating={4.5} 
          address={place.address}  
          category={place.category} 
       
       {/* 3. Menu & Order */}
-      <div className="mt-6"> {/* Margin top dikit aja karena udah ada divider di header */}
+      <div className="mt-6">
         <MenuOrder placeId={place.id} foods={foods} drinks={drinks} />
       </div>
     </div>

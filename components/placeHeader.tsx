@@ -9,12 +9,10 @@ interface PlaceHeaderProps {
 }
 
 const PlaceHeader = ({ name, rating = 4.5, address, category }: PlaceHeaderProps) => {
-  // Kita bikin dummy tags biar mirip desain (nanti bisa diambil dari DB kalau sudah support multi-category)
   const tags = [category, "Nongkrong", "Cozy", "Ngops", "Kuliner"];
 
   return (
     <div className="mt-6 mb-8">
-      {/* Baris 1: Nama, Rating, dan Icon Love */}
       <div className="flex justify-between items-start">
         <div className="flex flex-col gap-2">
            <div className="flex items-center gap-3">
@@ -25,24 +23,20 @@ const PlaceHeader = ({ name, rating = 4.5, address, category }: PlaceHeaderProps
               </div>
            </div>
         </div>
-        
-        {/* Icon Love (Favorit) */}
+
         <button className="p-2 rounded-full hover:bg-gray-50 text-gray-400 hover:text-red-500 transition-colors">
           <Heart size={32} />
         </button>
       </div>
 
-      {/* Baris 2: Alamat Lengkap & Jarak */}
       <p className="text-gray-600 mt-4 text-lg leading-relaxed max-w-3xl">
         {address} • <span className="text-gray-500">2.0 km</span>
       </p>
 
-      {/* Baris 3: Jam Buka (Hardcode dulu karena belum ada di DB) */}
       <p className="text-gray-800 mt-2 font-medium">
         <span className="font-bold">Buka:</span> 10.00 - 02.00
       </p>
 
-      {/* Baris 4: Tags / Kategori */}
       <div className="flex flex-wrap gap-2 mt-4">
         {tags.map((tag, index) => (
           <span 
@@ -53,8 +47,7 @@ const PlaceHeader = ({ name, rating = 4.5, address, category }: PlaceHeaderProps
           </span>
         ))}
       </div>
-      
-      {/* Judul Section Menu (Biar pas sama layout bawahnya) */}
+
       <div className="flex justify-between items-end mt-10 border-b border-gray-100 pb-4">
          <div>
             <h2 className="text-xl font-bold text-gray-900">Layanan & Menu Andalan</h2>

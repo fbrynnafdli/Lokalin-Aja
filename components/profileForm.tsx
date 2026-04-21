@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Storefront, MapPin, Tag, Article } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 
-// Tipe data props
 interface ProfileFormProps {
   initialData: {
     name: string;
@@ -52,7 +51,6 @@ const profileForm = ({ initialData }: ProfileFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
       
-      {/* Nama Tempat */}
       <div>
         <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
           <Storefront size={18} className="text-[#00BFA5]" /> Nama Tempat
@@ -65,7 +63,6 @@ const profileForm = ({ initialData }: ProfileFormProps) => {
         />
       </div>
 
-      {/* Kategori */}
       <div>
         <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
           <Tag size={18} className="text-[#00BFA5]" /> Kategori
@@ -81,7 +78,6 @@ const profileForm = ({ initialData }: ProfileFormProps) => {
         </select>
       </div>
 
-      {/* Deskripsi */}
       <div>
         <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
           <Article size={18} className="text-[#00BFA5]" /> Deskripsi Singkat
@@ -95,7 +91,6 @@ const profileForm = ({ initialData }: ProfileFormProps) => {
         />
       </div>
 
-      {/* Alamat */}
       <div>
         <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
           <MapPin size={18} className="text-[#00BFA5]" /> Alamat Lengkap
@@ -108,7 +103,6 @@ const profileForm = ({ initialData }: ProfileFormProps) => {
         />
       </div>
 
-      {/* Tombol Simpan */}
       <div className="pt-4 flex justify-end">
         <button 
           type="submit" 

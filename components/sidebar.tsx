@@ -25,7 +25,6 @@ const Sidebar = () => {
   return (
     <aside className="w-[280px] bg-white border-r border-gray-100 h-screen fixed left-0 top-0 flex flex-col p-6 z-40">
       
-      {/* Brand */}
       <div className="mb-10 px-2">
         <Link href="/" className="text-2xl font-bold text-[#00BFA5]">
           Lokalin Aja
@@ -33,7 +32,6 @@ const Sidebar = () => {
         <p className="text-xs text-gray-400 mt-1 font-medium">Mitra Dashboard</p>
       </div>
 
-      {/* Menu Navigasi */}
       <nav className="flex-1 flex flex-col gap-2">
         {menuItems.map((item) => {
           const isActive = pathname === item.href;
@@ -54,7 +52,6 @@ const Sidebar = () => {
         })}
       </nav>
 
-      {/* Tombol Keluar */}
       <button 
         onClick={() => signOut({ callbackUrl: '/' })}
         className="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl font-medium transition-colors mt-auto"

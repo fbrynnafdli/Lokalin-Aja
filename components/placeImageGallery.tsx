@@ -30,9 +30,7 @@ const PlaceImageGallery = ({ images }: { images: string[] }) => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      
-      {/* KIRI: Gambar Utama (Penentu Tinggi) */}
-      {/* aspect-[16/9] akan mengunci tinggi baris ini */}
+
       <div className="md:col-span-2 relative rounded-3xl overflow-hidden group aspect-[4/3] md:aspect-[16/9]">
         <img
           src={displayImages[0]}
@@ -41,18 +39,12 @@ const PlaceImageGallery = ({ images }: { images: string[] }) => {
         />
       </div>
 
-      {/* KANAN: 2 Gambar Kecil */}
-      {/* Pakai Flex + h-full biar tingginya maksa sama kayak kiri */}
       <div className="hidden md:flex flex-col gap-4 h-full">
-        
-        {/* Gambar Kanan Atas */}
-        {/* flex-1: Ambil sisa ruang yang ada (50%) */}
-        {/* relative: Biar anak di dalemnya (img absolute) posisinya bener */}
+
         <div 
           className="relative flex-1 rounded-3xl overflow-hidden group w-full cursor-pointer"
           onClick={() => handleImageClick(1)}
         >
-           {/* absolute inset-0: Paksa gambar menuhin kotak tanpa ngubah ukuran kotak */}
            <img
             src={displayImages[1]}
             alt="Side Top"
@@ -60,7 +52,6 @@ const PlaceImageGallery = ({ images }: { images: string[] }) => {
           />
         </div>
 
-        {/* Gambar Kanan Bawah */}
         <div 
           className="relative flex-1 rounded-3xl overflow-hidden group w-full cursor-pointer"
           onClick={() => handleImageClick(2)}
@@ -74,7 +65,6 @@ const PlaceImageGallery = ({ images }: { images: string[] }) => {
 
       </div>
 
-      {/* MOBILE ONLY (Tampilan HP) */}
       <div className="md:hidden grid grid-cols-2 gap-4">
          <div className="aspect-[4/3] rounded-3xl overflow-hidden" onClick={() => handleImageClick(1)}>
             <img src={displayImages[1]} className="w-full h-full object-cover"/>

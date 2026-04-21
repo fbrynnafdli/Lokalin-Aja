@@ -24,11 +24,9 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${poppins.variable}`}>
       <body className="antialiased font-sans">
-        {/* Konten Halaman (Page) */}
         <Providers>
         {children}
         </Providers>
-        {/* 2. PASANG FOOTER DISINI (Di luar children) */}
         <Footer />
       </body>
     </html>

@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Coffee, PencilSimple, Trash, X, UploadSimple } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 
-// Tipe data Product
 interface ProductProps {
   item: {
     id: string;
@@ -19,9 +18,8 @@ interface ProductProps {
 const ProductCard = ({ item }: ProductProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [isEditing, setIsEditing] = useState(false); // Mode Edit
+  const [isEditing, setIsEditing] = useState(false);
 
-  // State buat Edit Form
   const [editData, setEditData] = useState({
     name: item.name,
     price: item.price,
@@ -30,7 +28,6 @@ const ProductCard = ({ item }: ProductProps) => {
     isAvailable: item.isAvailable,
   });
 
-  // 1. FUNGSI HAPUS
   const handleDelete = async () => {
     if (!confirm("Yakin mau hapus menu ini?")) return;
     
@@ -45,9 +42,7 @@ const ProductCard = ({ item }: ProductProps) => {
     }
   };
 
-  // 2. FUNGSI TOGGLE TERSEDIA
   const handleToggle = async () => {
-    // Optimistic Update (Ubah UI duluan biar cepet)
     const newState = !editData.isAvailable;
     setEditData({ ...editData, isAvailable: newState });
 
@@ -58,17 +53,16 @@ const ProductCard = ({ item }: ProductProps) => {
         body: JSON.stringify({
           id: item.id,
           ...editData,
-          isAvailable: newState, // Kirim status baru
+          isAvailable: newState,
         }),
       });
       router.refresh();
     } catch (e) {
       alert("Gagal update status");
-      setEditData({ ...editData, isAvailable: !newState }); // Balikin kalau gagal
+      setEditData({ ...editData, isAvailable: !newState });
     }
   };
 
-  // 3. FUNGSI SIMPAN EDIT
   const handleSaveEdit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -87,7 +81,6 @@ const ProductCard = ({ item }: ProductProps) => {
     }
   };
 
-  // Helper: Ubah Gambar di Mode Edit
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.size < 1000000) {
@@ -97,7 +90,6 @@ const ProductCard = ({ item }: ProductProps) => {
     }
   };
 
-  // Format Rupiah
   const priceFormatted = new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -107,8 +99,7 @@ const ProductCard = ({ item }: ProductProps) => {
   return (
     <>
       <div className={`bg-white rounded-xl border transition-all overflow-hidden group relative ${!editData.isAvailable ? 'opacity-75 grayscale-[0.5]' : 'border-gray-100 shadow-sm hover:shadow-md'}`}>
-        
-        {/* Foto Produk */}
+
         <div className="h-40 bg-gray-100 relative overflow-hidden">
           {item.image ? (
             <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -117,8 +108,7 @@ const ProductCard = ({ item }: ProductProps) => {
               <Coffee size={48} />
             </div>
           )}
-          
-          {/* Tombol Aksi (Overlay) */}
+
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <button onClick={() => setIsEditing(true)} className="p-2 bg-white text-gray-700 rounded-lg hover:text-[#00BFA5] transition-colors">
               <PencilSimple size={20} weight="bold" />
@@ -129,12 +119,10 @@ const ProductCard = ({ item }: ProductProps) => {
           </div>
         </div>
 
-        {/* Info Produk */}
         <div className="p-4">
           <h4 className="font-bold text-gray-800 text-lg truncate">{item.name}</h4>
           <p className="text-[#00BFA5] font-bold mt-1">{priceFormatted}</p>
-          
-          {/* Toggle Switch */}
+
           <div className="mt-4 flex items-center justify-between text-xs text-gray-500 font-medium">
             <span>{editData.isAvailable ? "Tersedia" : "Habis"}</span>
             <div 
@@ -147,7 +135,6 @@ const ProductCard = ({ item }: ProductProps) => {
         </div>
       </div>
 
-      {/* === MODAL EDIT (Muncul pas tombol pensil diklik) === */}
       {isEditing && (
         <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
             <div className="bg-white w-full max-w-[400px] rounded-2xl p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
@@ -178,7 +165,6 @@ const ProductCard = ({ item }: ProductProps) => {
                         </select>
                     </div>
 
-                    {/* Edit Gambar */}
                     <div className="border p-2 rounded-lg flex items-center gap-2">
                         <div className="w-12 h-12 bg-gray-100 rounded overflow-hidden">
                             {editData.image && <img src={editData.image} className="w-full h-full object-cover"/>}

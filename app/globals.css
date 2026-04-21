@@ -1,12 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  /* Karena variable --font-poppins sudah ada di HTML (Root), */
-  /* Sekarang kita bisa aman memanggilnya di sini */
   --font-sans: var(--font-poppins);
 }
 
-/* Reset Standar */
 body {
   font-family: var(--font-sans);
   background: #ffffff;

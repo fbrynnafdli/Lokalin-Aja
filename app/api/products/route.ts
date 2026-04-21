@@ -5,7 +5,6 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// === 1. CREATE (POST) ===
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -24,7 +23,7 @@ export async function POST(req: Request) {
         category,
         image: image || "",
         placeId: place.id,
-        isAvailable: true, // Default true
+        isAvailable: true,
       },
     });
 
@@ -34,7 +33,6 @@ export async function POST(req: Request) {
   }
 }
 
-// === 2. UPDATE / EDIT (PUT) ===
 export async function PUT(req: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -43,7 +41,6 @@ export async function PUT(req: Request) {
     const body = await req.json();
     const { id, name, price, category, image, isAvailable } = body;
 
-    // Pastikan user adalah pemilik produk ini (Security Check)
     const product = await prisma.product.findUnique({
       where: { id },
       include: { place: true }
@@ -60,7 +57,7 @@ export async function PUT(req: Request) {
         price: Number(price),
         category,
         image,
-        isAvailable, // Bisa update status tersedia juga
+        isAvailable,
       },
     });
 
@@ -70,19 +67,16 @@ export async function PUT(req: Request) {
   }
 }
 
-// === 3. DELETE (DELETE) ===
 export async function DELETE(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    // Ambil ID dari URL params (contoh: /api/products?id=123)
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
 
     if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
 
-    // Security Check
     const product = await prisma.product.findUnique({
       where: { id },
       include: { place: true }

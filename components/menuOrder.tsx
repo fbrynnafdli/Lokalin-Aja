@@ -34,20 +34,17 @@ const MenuOrder = ({ placeId, foods, drinks }: MenuOrderProps) => {
   const { data: session } = useSession();
   const router = useRouter();
   
-  // State Keranjang
   const [cart, setCart] = useState<{ id: string; qty: number; price: number; name: string }[]>([]);
   
-  // State Form Tambahan (Sesuai Figma)
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [people, setPeople] = useState(1);
   const [notes, setNotes] = useState("");
-  const [isReservation, setIsReservation] = useState(false); // Ceklis Reservasi Meja
+  const [isReservation, setIsReservation] = useState(false);
 
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // --- LOGIC KERANJANG (Sama kayak kemarin) ---
   const addToCart = (product: Product) => {
     setCart((prev) => {
       const existing = prev.find((item) => item.id === product.id);
@@ -70,7 +67,6 @@ const MenuOrder = ({ placeId, foods, drinks }: MenuOrderProps) => {
 
   const totalPrice = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
 
-  // --- LOGIC CHECKOUT ---
   const handleCheckout = async () => {
     if (!session) {
       setAuthModalOpen(true);
@@ -92,7 +88,6 @@ const MenuOrder = ({ placeId, foods, drinks }: MenuOrderProps) => {
           placeId,
           items: cart,
           totalPrice,
-          // Kirim data tambahan ini ke backend (Nanti backend perlu disesuaikan kalau mau simpan ini)
           bookingDate: date,
           bookingTime: time,
           guestCount: people,
@@ -121,8 +116,7 @@ const MenuOrder = ({ placeId, foods, drinks }: MenuOrderProps) => {
 
   return (
     <div className="flex flex-col lg:flex-row gap-10 relative items-start">
-      
-      {/* === BAGIAN KIRI: DAFTAR MENU (TETAP SEPERTI YG KAMU SUKA) === */}
+
       <div className="flex-1 w-full">
         
         {/* Section Makanan */}
@@ -154,7 +148,7 @@ const MenuOrder = ({ placeId, foods, drinks }: MenuOrderProps) => {
         )}
       </div>
 
-      {/* === BAGIAN KANAN: FORMULIR PEMESANAN (ALA FIGMA) === */}
+      {/* FORMULIR PEMESANAN */}
       <div className="w-full lg:w-[380px] sticky top-24">
         <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100 p-6">
           
@@ -279,7 +273,6 @@ const MenuOrder = ({ placeId, foods, drinks }: MenuOrderProps) => {
   );
 };
 
-// Komponen Kartu Menu (Desain yang kamu suka)
 function MenuCard({ item, onAdd }: { item: Product; onAdd: () => void }) {
   return (
     <div className="flex gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">

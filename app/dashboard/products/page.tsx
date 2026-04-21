@@ -4,14 +4,14 @@ import { authOptions } from "@/lib/auth";
 import { PrismaClient } from "@prisma/client";
 import { Coffee, Cookie } from "@phosphor-icons/react/dist/ssr";
 import AddProductButton from "@/components/addProductButton";
-import ProductCard from "@/components/productCard"; // <--- 1. IMPORT KOMPONEN BARU
+import ProductCard from "@/components/productCard";
 
 const prisma = new PrismaClient();
 
 async function getProducts(userId: string) {
   const place = await prisma.place.findFirst({
     where: { ownerId: userId },
-    include: { products: { orderBy: { name: 'asc' } } }, // Urutkan biar rapi
+    include: { products: { orderBy: { name: 'asc' } } },
   });
   return place;
 }
@@ -39,7 +39,6 @@ export default async function ProductsPage() {
         <AddProductButton />
       </div>
 
-      {/* SECTION MINUMAN */}
       <div className="mb-10">
         <div className="flex items-center gap-2 mb-4">
             <div className="p-2 bg-orange-100 text-orange-600 rounded-lg">
@@ -52,14 +51,12 @@ export default async function ProductsPage() {
         ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {drinks.map((item) => (
-                    // 2. PAKAI KOMPONEN PRODUCTCARD (Wajib passing semua props)
                     <ProductCard key={item.id} item={item} />
                 ))}
             </div>
         )}
       </div>
 
-      {/* SECTION MAKANAN */}
       <div>
         <div className="flex items-center gap-2 mb-4">
             <div className="p-2 bg-yellow-100 text-yellow-600 rounded-lg">
@@ -81,5 +78,3 @@ export default async function ProductsPage() {
   );
 }
 
-// HAPUS function ProductCard lama yang ada di paling bawah file ini!
-// Karena sekarang udah kita pindahin ke components/ProductCard.tsx

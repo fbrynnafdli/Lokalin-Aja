@@ -48,13 +48,8 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
   };
 
   return (
-    // Overlay Hitam Transparan
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      
-      {/* Kotak Modal Putih */}
       <div className="bg-white w-full max-w-[400px] rounded-2xl p-6 shadow-2xl relative animate-in fade-in zoom-in duration-300">
-        
-        {/* Tombol Close (X) */}
         <button 
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
@@ -120,7 +115,7 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
           </div>
         </div>
 
-        {/* Social Login Buttons (Dummy Dulu) */}
+        {/* Social Login Buttons */}
         <div className="flex flex-col gap-3">
           <button className="flex items-center justify-center gap-2 w-full border border-gray-300 py-2.5 rounded-lg hover:bg-gray-50 transition-all font-medium text-gray-700 text-sm">
             <GoogleLogo size={20} weight="bold" className="text-red-500" />

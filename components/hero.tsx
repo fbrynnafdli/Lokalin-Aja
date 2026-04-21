@@ -14,12 +14,11 @@ import {
 
 const Hero: React.FC<{ searchHeight?: number }> = ({ searchHeight = 60 }) => {
   return (
-    // Padding kiri-kanan (px) sudah diatur di sini (80px), jadi konten di dalam akan nurut batas ini
+
     <section className="w-full bg-white pt-8 pb-8 px-6 md:pl-[80px] md:pr-[80px]">
       
       <div className="flex flex-col-reverse md:flex-row items-center gap-12 md:justify-between">
         
-        {/* === BAGIAN KIRI: TEXT & SEARCH === */}
         <div className="flex-1 w-full min-w-0 md:mt-2">
           
           {/* Headline */}
@@ -74,11 +73,6 @@ const Hero: React.FC<{ searchHeight?: number }> = ({ searchHeight = 60 }) => {
 
         </div>
 
-        {/* === BAGIAN KANAN: GAMBAR === */}
-        {/* FIX: 
-            1. Saya hapus '-mr-12' biar dia lurus sama garis padding kanan (lurus sama tombol Masuk di Navbar).
-            2. Saya ganti 'items-start' jadi 'items-center' (di div pembungkus utama) biar gambarnya center secara vertikal kalau layarnya gede.
-        */}
         <div className="flex-shrink-0 w-full md:w-auto flex justify-center md:justify-end">
           <div className="relative w-full h-auto md:w-[432px] md:h-[309px]">
              <Image 

@@ -13,7 +13,6 @@ interface ReviewCardProps {
   review: string;
   tags: string[];
 }
-// ------------------------------------------
 
 const ReviewCard: React.FC<ReviewCardProps> = ({
   avatar,
@@ -26,7 +25,6 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   return (
     <div className="w-full h-full relative rounded-xl bg-white flex items-start p-2 gap-3 text-left font-sans">
       
-      {/* === AVATAR (Kiri) === */}
       <div className="flex-shrink-0">
         <Image 
           src={avatar} 
@@ -37,13 +35,10 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
         />
       </div>
 
-      {/* === CONTENT (Kanan) === */}
       <div className="flex-1 flex flex-col gap-2">
         
-        {/* === HEADER === */}
         <div className="flex justify-between items-start w-full">
           
-          {/* Nama & Tempat (Flow Text) */}
           <div className="flex-1 pr-2">
             <span className="font-bold text-gray-900 text-base leading-snug">
               {name}
@@ -53,7 +48,6 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             </span>
           </div>
 
-          {/* Rating & Icon */}
           <div className="flex-shrink-0 flex items-center gap-3 pt-0.5">
             <div className="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-md">
               <Star weight="fill" className="text-orange-400" size={14} />
@@ -64,12 +58,10 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
 
         </div>
 
-        {/* Review Text */}
         <div className="text-sm md:text-base text-gray-600 font-light leading-relaxed italic line-clamp-4">
           “{review}”
         </div>
 
-        {/* Tags */}
         <div className="text-xs md:text-sm text-[#00BFA5] font-medium mt-auto pt-2">
           Tags: {tags.join(", ")}
         </div>
