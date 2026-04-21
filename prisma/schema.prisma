@@ -1,0 +1,127 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// === ENUM ===
+
+enum Role {
+  MEMBER
+  MITRA
+  ADMIN
+}
+
+enum PlaceStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+// === MODELS ===
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String?
+  role          Role      @default(MEMBER)
+  image         String?
+  createdAt     DateTime  @default(now())
+  
+  reviews       Review[]
+  placesCreated Place[]   @relation("PlaceCreator")
+  placesOwned   Place[]   @relation("PlaceOwner")
+  orders        Order[]
+}
+
+model Place {
+  id          String      @id @default(cuid())
+  name        String
+  category    String
+  address     String      @db.Text
+  description String      @db.Text
+  images      String[]
+  status      PlaceStatus @default(PENDING)
+  
+  createdById String
+  createdBy   User        @relation("PlaceCreator", fields: [createdById], references: [id])
+
+  ownerId     String?
+  owner       User?       @relation("PlaceOwner", fields: [ownerId], references: [id])
+
+  reviews     Review[]
+  products    Product[]
+  orders      Order[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  content   String   @db.VarChar(200)
+  rating    Int
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  
+  placeId   String
+  place     Place    @relation(fields: [placeId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  price       Int
+  category    String
+  image       String?
+  isAvailable Boolean     @default(true) 
+  
+  placeId     String
+  place       Place       @relation(fields: [placeId], references: [id])
+  
+  orderItems  OrderItem[] // Relasi ke OrderItem
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  totalPrice  Int         // Kita pakai totalPrice aja biar konsisten
+  
+  status      OrderStatus @default(PENDING)
+  
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  placeId     String
+  place       Place       @relation(fields: [placeId], references: [id])
+  
+  items       OrderItem[] // Ini butuh model OrderItem di bawah
+  createdAt   DateTime    @default(now())
+}
+
+// === INI YANG KURANG TADI ===
+model OrderItem {
+  id        String  @id @default(cuid())
+  
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  
+  quantity  Int     // Jumlah beli (misal: 2 pcs)
+  price     Int     // Harga satuan saat dibeli
+}

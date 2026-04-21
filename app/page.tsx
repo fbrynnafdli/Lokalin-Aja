@@ -1,65 +1,243 @@
-import Image from "next/image";
+import React from "react";
+import Navbar from "@/components/navbar"; 
+import Hero from "@/components/hero"; 
+import UmkmCard from "@/components/umkmCard";
+import ReviewCard from "@/components/reviewCard";
+import CategoryCard from "@/components/categoryCard";
+import AboutSection from "@/components/aboutSection";
+import { PrismaClient } from "@prisma/client";
+import Link from "next/link";
 
-export default function Home() {
+const prisma = new PrismaClient();
+
+// === FUNGSI AMBIL DATA DARI DATABASE ===
+async function getPlaces() {
+  const places = await prisma.place.findMany({
+    where: { status: "APPROVED" }, // Hanya ambil yang sudah diapprove
+    orderBy: { createdAt: 'desc' }, // Urutkan dari yang terbaru
+    take: 4, // Ambil 4 aja buat section "Lagi Rame"
+    include: { reviews: true } // Siapa tau butuh rating nanti
+  });
+  return places;
+}
+
+export default async function Home() {
+  // Panggil data sebelum render HTML
+  const places = await getPlaces();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-white font-sans">
+      <Navbar />
+      <Hero />
+      
+      {/* =========================================
+          SECTION 1: LAGI RAME (DATA DINAMIS)
+          Padding: pt-16 (atas lega), pb-4
+      ========================================= */}
+      <section className="w-full bg-white pt-16 pb-4 px-16 md:px-[80px]">
+        
+        {/* Header Judul Section */}
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-[18px] font-bold text-gray-900">
+            Lagi Rame Di Area Kamu
+          </h2>
+          <Link href="/explore" className="text-[#00BFA5] font-semibold hover:underline">
+            Selengkapnya
+          </Link>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
+
+        {/* Grid Container */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          
+          {/* LOGIKA: Kalau belum ada data, tampilkan pesan kosong */}
+          {places.length === 0 ? (
+             <div className="col-span-4 py-10 text-center text-gray-400 bg-gray-50 rounded-xl border border-dashed">
+                Belum ada tempat yang terdaftar. Yuk jadi mitra pertama!
+             </div>
+          ) : (
+            // LOGIKA: Looping data dari Database
+            places.map((place) => (
+              <Link href={`/place/${place.id}`} key={place.id} className="block group">
+                <UmkmCard 
+                  // Ambil foto pertama, atau pakai placeholder kalau kosong
+                  image={place.images[0] || "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1000&auto=format&fit=crop"} 
+                  title={place.name}
+                  rating="4.8" // Nanti kita hitung rata-rata review beneran
+                  location={place.address} // Alamat asli dari DB
+                  distance="0.5 km" // Nanti pake fitur lokasi (Maps)
+                  hours="Buka Hari Ini"
+                  badge={place.category} // Kategori dari DB (Ngops/Makan/dll)
+                  tags={[place.category, "Hits"]} // Tag dummy + kategori
+                  // Props optional (kalau di komponen kamu ada)
+                  badgeColor={place.category === 'Ngops' ? 'bg-[#00BFA5]' : 'bg-[#FF6B6B]'} 
+                />
+              </Link>
+            ))
+          )}
+
+        </div>
+      </section>
+
+      {/* =========================================
+          SECTION 2: PROMO (MASIH STATIC DULU)
+          Nanti bisa dibikin dinamis kalau sudah ada fitur Promo di Dashboard Mitra
+      ========================================= */}
+      <section className="w-full bg-white pt-4 pb-4 px-16 md:px-[80px]">
+        
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-[18px] font-bold text-gray-900">
+            Tempat Asik Yang Lagi Promo
+          </h2>
+          <a href="#" className="text-[#00BFA5] font-semibold hover:underline">
+            Selengkapnya
           </a>
         </div>
-      </main>
-    </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {/* Card Promo 1 */}
+          <UmkmCard 
+            image="/images/sorespace.jpg" 
+            title="Sore Space" rating="4.5" location="Sumedang" distance="2.3 km" hours="Tutup 02.00"
+            badge="Cozy"
+            promo="Beli 1 Dapat 1" // <--- Ini yang bikin beda
+            tags={["Nongkrong", "Ngops"]}
+          />
+          {/* Card Promo 2 */}
+          <UmkmCard 
+            image="/images/sorespace.jpg" 
+            title="Sore Space" rating="4.5" location="Sumedang" distance="2.3 km" hours="Tutup 02.00"
+            badge="Cozy"
+            promo="Diskon 50%"
+            tags={["Nongkrong", "Ngops"]}
+          />
+           {/* Card Promo 3 (Placeholder) */}
+           <UmkmCard 
+            image="/images/sorespace.jpg" 
+            title="Sore Space" rating="4.5" location="Sumedang" distance="2.3 km" hours="Tutup 02.00"
+            badge="Cozy"
+            promo="Hemat"
+            tags={["Nongkrong", "Ngops"]}
+          />
+           {/* Card Promo 4 (Placeholder) */}
+           <UmkmCard 
+            image="/images/sorespace.jpg" 
+            title="Sore Space" rating="4.5" location="Sumedang" distance="2.3 km" hours="Tutup 02.00"
+            badge="Cozy"
+            promo="Beli 1 Dapat 1"
+            tags={["Nongkrong", "Ngops"]}
+          />
+        </div>
+      </section>
+
+      {/* =========================================
+          SECTION 3: UMKM LOKAL (STATIC)
+      ========================================= */}
+      <section className="w-full bg-white pt-4 pb-4 px-16 md:px-[80px]">
+        
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-[18px] font-bold text-gray-900">
+            UMKM Lokal Yang Wajib Kamu Tau
+          </h2>
+          <a href="#" className="text-[#00BFA5] font-semibold hover:underline">
+            Selengkapnya
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {/* Card Lokal 1 */}
+          <UmkmCard 
+            image="/images/warungbuimas.jpg" 
+            title="Warung Bu Imas" rating="4.9" location="Gg. Unsap" distance="1.0 km" hours="Mulai dari 10rb"
+            badge="Asli Lokal"
+            description="Sambelnya bikin inget masakan Ibu di rumah."
+          />
+          {/* Sisanya static dulu biar layout gak rusak */}
+          <UmkmCard 
+            image="/images/warungbuimas.jpg" 
+            title="Warung Bu Imas" rating="4.9" location="Gg. Unsap" distance="1.0 km" hours="Mulai dari 10rb"
+            badge="Asli Lokal"
+            description="Sambelnya bikin inget masakan Ibu di rumah."
+          />
+           <UmkmCard 
+            image="/images/warungbuimas.jpg" 
+            title="Warung Bu Imas" rating="4.9" location="Gg. Unsap" distance="1.0 km" hours="Mulai dari 10rb"
+            badge="Asli Lokal"
+            description="Sambelnya bikin inget masakan Ibu di rumah."
+          />
+           <UmkmCard 
+            image="/images/warungbuimas.jpg" 
+            title="Warung Bu Imas" rating="4.9" location="Gg. Unsap" distance="1.0 km" hours="Mulai dari 10rb"
+            badge="Asli Lokal"
+            description="Sambelnya bikin inget masakan Ibu di rumah."
+          />
+        </div>
+      </section>
+
+      {/* =========================================
+          SECTION 4: REVIEW (STATIC)
+      ========================================= */}
+      <section className="w-full bg-white pt-4 pb-4 px-6 md:px-[80px]">
+        
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-[18px] font-bold text-gray-900">
+            Apa Yang Di Ceritakan Oleh Mereka
+          </h2>
+          <a href="#" className="text-[#00BFA5] font-semibold text-sm md:text-base hover:underline">
+            Selengkapnya
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+           <ReviewCard 
+             avatar="/images/budi.jpeg" 
+             name="Budiansyah"
+             place="Sore Space"
+             rating="4.5"
+             review="Tempatnyaa cozy bangettttt, cocok sama namanyaa kalau datang sore-sore tuh syahdu sekaliiiii."
+             tags={["Cozy", "Nugasable"]}
+           />
+           <ReviewCard 
+             avatar="/images/budi.jpeg" 
+             name="Siti Maemunah"
+             place="Kopi Kenangan"
+             rating="5.0"
+             review="Kopinya enak banget, baristanya ramah. Cocok buat yang mau WFC seharian."
+             tags={["WFC", "Kopi"]}
+           />
+           <ReviewCard 
+             avatar="/images/budi.jpeg" 
+             name="Asep Stroberi"
+             place="Warung Bu Imas"
+             rating="4.8"
+             review="Sambel karedoknya juara dunia! Pedesnya nampol tapi bikin nagih."
+             tags={["Kuliner", "Pedas"]}
+           />
+        </div>
+      </section>
+
+      {/* =========================================
+          SECTION 5: KATEGORI (STATIC)
+      ========================================= */}
+      <section className="w-full bg-white pt-4 pb-24 px-6 md:px-[80px]">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-[18px] font-bold text-gray-900">
+            Lagi Pengen ke Mana?
+          </h2>
+          <a href="#" className="text-[#00BFA5] font-semibold text-sm md:text-base hover:underline">
+            Selengkapnya
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+           <CategoryCard name="Ngops" image="/images/ngops.jpg" />
+           <CategoryCard name="Spot Nugas" image="/images/spotnugas.jpg" />
+           <CategoryCard name="Harga Mahasiswa" image="/images/hargamahasiswa.jpg" />
+           <CategoryCard name="Hidden Gem" image="/images/hidden.jpg" />
+        </div>
+      </section>
+      
+      <AboutSection />
+
+    </main>
   );
 }
